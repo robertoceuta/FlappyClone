@@ -1,9 +1,12 @@
 const canvas = new Canvas('my-canvas');
 const cxt = new Context(canvas.cnv);
+const cxt2 = new Context(canvas.cnv);
 const fondo = new Fondo();
 const suelo = new Suelo();
 const tuberia = new Tuberias();
 const pajaro = new Pajaro();
+const gameover = new Gameover();
+const puntuacion = new Puntuacion();
 const velocidadVuelo = 2;
 const timeOut = 1000/60;
 let intervalo = null;
@@ -12,6 +15,7 @@ let sumaFrames = 0;
 window.onload = function() {
   document.getElementById("start-button").onclick = function() {
     startGame();
+    this.blur();
   };
 
   canvas.cnv.addEventListener('click', function (e){
@@ -43,10 +47,14 @@ window.onload = function() {
         console.log(pajaro.posY+32>=tuberia.tubertiasBenY[0]);*/
        // console.log((pajaro.posY<=tuberia.tubertiasTenY[i]+793 && pajaro.posX+46>=tuberia.tubertiasEnX[i]) || (pajaro.posX+46>=tuberia.tubertiasEnX[0] && pajaro.posY+32>=tuberia.tubertiasBenY[0]));
         //console.log(tuberia.contadorTuberias());
-            if((pajaro.posY<=tuberia.tubertiasTenY[tuberia.contadorTuberias()]+793 && pajaro.posX+46>=tuberia.tubertiasEnX[tuberia.contadorTuberias()]) ||
-                (pajaro.posX+46>=tuberia.tubertiasEnX[tuberia.contadorTuberias()] && pajaro.posY+32>=tuberia.tubertiasBenY[tuberia.contadorTuberias()]) ||
-                (pajaro.posY+20>=suelo.hSuelo)){
+            if((pajaro.posY+5<=tuberia.tubertiasTenY[tuberia.contadorTuberias()]+793 && pajaro.posX+40>=tuberia.tubertiasEnX[tuberia.contadorTuberias()]) ||
+                (pajaro.posX+40>=tuberia.tubertiasEnX[tuberia.contadorTuberias()] && pajaro.posY+28>=tuberia.tubertiasBenY[tuberia.contadorTuberias()]) ||
+                (pajaro.posY+25>=suelo.hSuelo)){
+
                 clearInterval(intervalo);
+                gameover.dibujargameover(cxt.c);
+
+
             }
             //console.log((pajaro.posY<=tuberia.tubertiasTenY[i]+793 && pajaro.posX+46>=tuberia.tubertiasEnX[i]) || (pajaro.posX+46>=tuberia.tubertiasEnX[0] && pajaro.posY+32>=tuberia.tubertiasBenY[0]));
 
@@ -64,6 +72,8 @@ window.onload = function() {
       tuberia.dibujarTuberias(cxt.c, velocidadVuelo);
       suelo.dibujarSuelo(cxt.c, velocidadVuelo);
       pajaro.dibujarPajaro(cxt.c, velocidadVuelo, sumaFrames%10==0);
+      puntuacion.dibujarContador(cxt2.c);
+      puntuacion.sumarPuntos(tuberia.pasado);
       sumaFrames+=1;
       colision();
     },timeOut);

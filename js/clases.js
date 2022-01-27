@@ -15,7 +15,7 @@ class Context {
 class Fondo{
     constructor() {
         this.img = new Image();
-        this.img.src = "../images/bg.png";
+        this.img.src = "images/bg.png";
         this.w = 0;
     }
 
@@ -34,7 +34,7 @@ class Fondo{
 class Suelo {
     constructor() {
         this.img = new Image();
-        this.img.src = "../images/game-bg-footer.png"
+        this.img.src = "images/game-bg-footer.png"
         this.w = 0;
         this.hSuelo = 475;
         this.img.width = 466;
@@ -65,6 +65,7 @@ class Tuberias {
         this.tubertiasBenY = new Array();
         this.numTuberias = 5;
         this.contadorNumTuberias = 0;
+        this.pasado=false;
         for(let i = 0; i<this.numTuberias;i++){
             this.tuberiasT.push(new Image());
             this.tuberiasB.push(new Image());
@@ -72,13 +73,14 @@ class Tuberias {
             let aux = Math.floor(Math.random()*((-525) - (-775)))+(-775);
             this.tubertiasTenY.push(aux);
             this.tubertiasBenY.push((793+aux)+135);
-            this.tuberiasT[i].src = "../images/obstacle_top.png";
-            this.tuberiasB[i].src = "../images/obstacle_bottom.png";
+            this.tuberiasT[i].src = "images/obstacle_top.png";
+            this.tuberiasB[i].src = "images/obstacle_bottom.png";
         }
         this.contador = 0;
     }
 
     dibujarTuberias(cxt, velocidadVuelo){
+        this.pasado = false;
                 for(let i = 0; i<this.numTuberias; i++){
                     cxt.drawImage(this.tuberiasT[i], this.tubertiasEnX[i],  this.tubertiasTenY[i]);
                     cxt.drawImage(this.tuberiasB[i], this.tubertiasEnX[i], this.tubertiasBenY[i]);
@@ -88,7 +90,9 @@ class Tuberias {
                         if(this.contadorNumTuberias>=this.numTuberias){
                             this.contadorNumTuberias=0;
                         }
+                        this.pasado = true;
                     }
+
                 }
 
         if(this.tubertiasEnX[this.contador]<=-200){
@@ -128,7 +132,7 @@ class Pajaro {
         this.posX = 250;
         this.posY = 250;
         this.img = new Image();
-        this.img.src = "../images/bird.png";
+        this.img.src = "images/bird.png";
         this.alas =[0,46,92];
         this.contador = 0;
         this.gravedad = 0.25;
@@ -162,7 +166,55 @@ class Pajaro {
         cxt.rotate(20 * Math.PI / 180);
     }
 
+}
 
+class Gameover{
+    constructor() {
+        this.img = new Image();
+        this.img.src = "images/gameover.png";
+        this.posX = 80;
+        this.posY = 120;
+    }
 
+    dibujargameover(cxt){
+        cxt.drawImage(this.img, this.posX, this.posY);
+    }
 
+}
+
+class Puntuacion {
+    constructor() {
+        this.contador = 0;
+        this.gradient = undefined;
+        this.colores = ['black','red','orange','yellow','green','blue','indigo','violet','white'];
+        this.contador = 0;
+    }
+
+    dibujarContador(cxt){
+        this.gradient = cxt.createLinearGradient(0, 0, 128, 0);
+        /*if(aleteo){
+            for(let i = 0; i<this.colores.length;i++){
+
+            }
+        }*/
+        this.gradient.addColorStop(0, "black");
+        this.gradient.addColorStop(0.2, "red");
+        this.gradient.addColorStop(0.3, "orange");
+        this.gradient.addColorStop(0.4, "yellow");
+        this.gradient.addColorStop(0.5, "green");
+        this.gradient.addColorStop(0.6, "blue");
+        this.gradient.addColorStop(0.7, "indigo");
+        this.gradient.addColorStop(0.8, "violet");
+        this.gradient.addColorStop(1.0, "white");
+
+        cxt.fillStyle = this.gradient;
+        cxt.font = "18px Verdana";
+        cxt.fillText("Puntuación: "+this.contador, 8, 20);
+    }
+
+    sumarPuntos(control){
+        if(control){
+            this.contador++;
+        }
+    }
 }
